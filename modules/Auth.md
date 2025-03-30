@@ -680,3 +680,79 @@ If using an API, you can modify the process to suit your application. Instead of
 - Use the `link` variable to insert the full reset link.
 
 > **Tip:** This allows flexibility depending on whether you’re building a web-based or mobile authentication system.
+
+## Options
+
+### `messages`
+
+Allows you to customize validation error messages as needed.
+
+---
+
+### `mailer`
+
+A mailer function that you must provide to the Auth module. This is used internally to send password reset emails.
+
+---
+
+### `mode`
+
+Determines whether the user should be logged in automatically after registration.
+
+- **`smart`**: Automatically logs in the user.
+- **`lazy`**: Requires the user to log in manually after registration.
+
+---
+
+### `subject`
+
+The email subject for password reset emails.  
+**Default**: `"Password Reset Link"`
+
+---
+
+### `expires`
+
+The expiration time for the JWT (JSON Web Token), in seconds.
+
+---
+
+### `component`
+
+The name of your password reset component view.  
+**Default**: `"emails.reset_email"` (stored in `views/email/reset_email.fx`)  
+You can modify or replace this with another component using dot notation.
+
+---
+
+### `base`
+
+The base path for your password reset link.  
+**Default**: `"password-reset"` (final link will be `password-reset/:token`).
+
+---
+
+### `createdAt`
+
+The column name for the creation timestamp in your users table.  
+**Default**: `"created_at"`  
+You can update this to a custom column name or set it to `false`.
+
+> **Note**: Disabling the creation timestamp is **not recommended**.
+
+---
+
+### `updatedAt`
+
+The column name for the update timestamp in your users table.  
+**Default**: `"updated_at"`  
+You can update this to a custom column name or set it to `false`.
+
+> **Note**: Disabling the update timestamp is **not recommended**.
+
+---
+
+### `cookie`
+
+Cookie options for the `authToken` cookie.  
+_(See cookie middleware documentation for more details on `CookieOptions`.)_
