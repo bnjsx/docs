@@ -1,16 +1,16 @@
-# BNJSX Documentation
+# Bnjsx Documentation
 
-Welcome to the **BNJSX Documentation**! This repository contains all the guides and references you need to work with BNJSX.
+Welcome to the **Bnjsx Documentation**! This repository contains all the guides and references you need to work with Bnjsx.
 
 ## Getting Started
 
-This repository contains documentation for **BNJSX**. Use Git branches to navigate different versions:
+This repository contains documentation for **Bnjsx**. Use Git branches to navigate different versions:
 
-- `main` – Latest stable documentation
-- `v1` – Official documentation for BNJSX v1.
+- `main` – Latest documentation updates
+- `v1` – Official documentation for Bnjsx v1.
 - `v2` – (Coming soon) Work-in-progress.
 
-## Contributing
+## ⛏️ Contributing
 
 We welcome contributions! To contribute:
 
