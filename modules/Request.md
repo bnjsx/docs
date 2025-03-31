@@ -6,12 +6,12 @@ The **Request Module** extends Node.js `IncomingMessage`, providing additional m
 
 Every middleware function has access to the request object in the first argument. Below is a list of useful properties and methods you can use:
 
-### 1. `response`
+#### 1. `response`
 
 - The response object associated with this request.
 - **Type:** `Response`
 
-### 2. `cookies`
+#### 2. `cookies`
 
 - Stores cookies sent with the request.
 - **Type:** `Record<string, string>`
@@ -22,7 +22,7 @@ Every middleware function has access to the request object in the first argument
 
 **Note:** This property is `undefined` unless you use our cookie middleware, which is responsible for parsing and filling the `req.cookies` property.
 
-### 3. `protocol`
+#### 3. `protocol`
 
 - Determines the request protocol.
 - **Type:** `'http' | 'https'`
@@ -31,7 +31,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.protocol); // 'http'
   ```
 
-### 4. `host`
+#### 4. `host`
 
 - The hostname extracted from the request URL.
 - **Type:** `string`
@@ -40,7 +40,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.host); // 'localhost'
   ```
 
-### 5. `port`
+#### 5. `port`
 
 - The port number used in the request.
 - **Type:** `string`
@@ -49,7 +49,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.port); // '2025'
   ```
 
-### 6. `path`
+#### 6. `path`
 
 - The request path without query parameters.
 - **Type:** `string`
@@ -58,7 +58,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.path); // '/api/users'
   ```
 
-### 7. `query`
+#### 7. `query`
 
 - Parsed query parameters from the request URL.
 - **Type:** `URLSearchParams`
@@ -67,7 +67,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.query.get('id')); // '123'
   ```
 
-### 8. `params`
+#### 8. `params`
 
 - Extracted route parameters.
 - **Type:** `Record<string, string> | string[]`
@@ -77,7 +77,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.params); // ['42'] for regex-based routes
   ```
 
-### 9. `body`
+#### 9. `body`
 
 - The parsed body of the request.
 - **Type:** `any`
@@ -88,7 +88,7 @@ Every middleware function has access to the request object in the first argument
 
 **Note:** The `body` is filled using the `Form` module (handling fields and file uploads) and can also be populated by other middlewares such as `json` and `text` middleware.
 
-### 10. `errors`
+#### 10. `errors`
 
 - Stores validation errors related to form submissions.
 - **Type:** `Record<string, Array<string>>`
@@ -97,7 +97,7 @@ Every middleware function has access to the request object in the first argument
   console.log(req.errors); // { email: ['Invalid email format'] }
   ```
 
-### 11. `type(name: string): boolean`
+#### 11. `type(name)`
 
 - Checks if the `Content-Type` header matches a given MIME type.
 - **Parameters:**
@@ -111,7 +111,7 @@ Every middleware function has access to the request object in the first argument
   }
   ```
 
-### 12. `accepts(name: string): boolean`
+#### 12. `accepts(name)`
 
 - Checks if the request accepts a specific MIME type.
 - **Parameters:**
@@ -124,7 +124,7 @@ Every middleware function has access to the request object in the first argument
   }
   ```
 
-### 13. `getHeader(name: string): string | string[] | undefined`
+#### 13. `getHeader(name)`
 
 - Retrieves a specified request header.
 - **Parameters:**
