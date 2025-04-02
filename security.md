@@ -1,3 +1,46 @@
+# Bnjsx Security
+
+Keeping your application secure is crucial, and Bnjsx provides three built-in middleware to help you do just that:
+
+- **CSRF Middleware** – Prevents Cross-Site Request Forgery (CSRF) attacks.
+- **CORS Middleware** – Manages cross-origin access to your application.
+- **Security Middleware** – Applies essential security headers to protect against common web threats.
+
+This guide covers how to use and configure these middleware to safeguard your Bnjsx application.
+
+## Table of Contents
+
+- [CORS Middleware](#cors-middleware)
+  - [How to Use CORS Middleware](#how-to-use-cors-middleware)
+  - [CORS Configuration Options](#cors-configuration-options)
+  - [CORS Options Overview](#cors-options-overview)
+  - [1. `origin` – Controlling Access](#1-origin--controlling-access)
+  - [2. `credentials` – Sending Cookies & Auth](#2-credentials--sending-cookies--auth)
+  - [3. `methods` – Allowed HTTP Methods](#3-methods--allowed-http-methods)
+  - [4. `headers` – Custom Request Headers](#4-headers--custom-request-headers)
+  - [5. `expose` – Custom Response Headers](#5-expose--custom-response-headers)
+  - [6. `maxAge` – Preflight Caching](#6-maxage--preflight-caching)
+- [CSRF Middleware](#csrf-middleware)
+  - [Setup Your App and Router](#setup-your-app-and-router)
+  - [Add CSRF Token](#add-csrf-token)
+  - [Validate CSRF Tokens](#validate-csrf-tokens)
+  - [Handle CSRF Validation Errors](#handle-csrf-validation-errors)
+  - [CSRF Protection in Web Mode](#csrf-protection-in-web-mode)
+- [Security Middleware](#security-middleware)
+  - [Content Security Policy (CSP)](#content-security-policy-csp)
+  - [Strict Transport Security (HSTS)](#strict-transport-security-hsts)
+  - [Referrer Policy](#referrer-policy)
+  - [Cross-Origin Resource Policy (CORP)](#cross-origin-resource-policy-corp)
+  - [Cross-Origin Opener Policy (COOP)](#cross-origin-opener-policy-coop)
+  - [Cross-Origin Embedder Policy (COEP)](#cross-origin-embedder-policy-coep)
+  - [Origin-Agent Cluster](#origin-agent-cluster)
+  - [X-Content-Type-Options](#x-content-type-options)
+  - [X-DNS-Prefetch-Control](#x-dns-prefetch-control)
+  - [X-Download-Options](#x-download-options)
+  - [XSS Protection](#xss-protection)
+  - [X-Frame-Options](#x-frame-options)
+  - [X-Permitted-Cross-Domain-Policies](#x-permitted-cross-domain-policies)
+
 ## CORS Middleware
 
 The **CORS (Cross-Origin Resource Sharing) middleware** allows you to configure how your server handles requests from different origins. It ensures that only authorized domains can access your API while enabling secure cross-origin requests.
@@ -292,7 +335,7 @@ We already provide a default security configuration, so in most cases, no additi
 
 This guide explains each security option and provides configuration examples.
 
-### 1. Content Security Policy (CSP)
+### Content Security Policy (CSP)
 
 The Content Security Policy (CSP) defines which resources can be loaded in the browser, reducing the risk of XSS attacks.
 
@@ -314,60 +357,45 @@ The Content Security Policy (CSP) defines which resources can be loaded in the b
 
 **Default:**
 
-```json
-{
-  // Allow loading all content from the same origin unless explicitly specified otherwise
-  "defaultSrc": "'self'",
-
-  // Only allow using a <base> tag that points to the same origin
-  "baseUri": "'self'",
-
-  // Allow fonts to be loaded from the same origin, any HTTPS source, or as a data URL
-  "fontSrc": "'self' https: data:",
-
-  // Only allow form submissions to the same origin
-  "formAction": "'self'",
-
-  // Only allow embedding this page in iframes on the same origin
-  "frameAncestors": "'self'",
-
-  // Allow loading images from the same origin or as base64-encoded data URLs
-  "imgSrc": "'self' data:",
-
-  // Completely block embedding objects like Flash, Java Applets, or other plugins
-  "objectSrc": "'none'",
-
-  // Only allow executing scripts that are hosted on the same origin
-  "scriptSrc": "'self'",
-
-  // Prevent inline JavaScript inside HTML attributes from executing
-  "scriptSrcAttr": "'none'",
-
-  // Allow styles from the same origin and any HTTPS source, but also allow inline styles
-  "styleSrc": "'self' https: 'unsafe-inline'",
-
-  // Automatically upgrade all HTTP requests to HTTPS, preventing mixed content issues
-  "upgradeInsecureRequests": true
+```js
+security: {
+  contentSecurityPolicy: {
+    defaultSrc: "'self'", // Load all content from the same origin unless specified
+    baseUri: "'self'", // Only allow <base> tag from the same origin
+    fontSrc: "'self' https: data:", // Allow fonts from same origin, HTTPS, or data URLs
+    formAction: "'self'", // Only allow form submissions to the same origin
+    frameAncestors: "'self'", // Only allow embedding in iframes on the same origin
+    imgSrc: "'self' data:", // Allow images from same origin or data URLs
+    objectSrc: "'none'", // Block embedding objects (Flash, Java, etc.)
+    scriptSrc: "'self'", // Only allow scripts from the same origin
+    scriptSrcAttr: "'none'", // Block inline JavaScript inside attributes
+    styleSrc: "'self' https: 'unsafe-inline'", // Allow styles from same origin, HTTPS, and inline styles
+    upgradeInsecureRequests: true; // Force all HTTP requests to upgrade to HTTPS
+  }
 }
 ```
 
 **Examples:**
 
-```ts
-security.contentSecurityPolicy = {
-  defaultSrc: "'self'", // Only allow resources from the same origin
-  scriptSrc: ["'self'", 'https://trusted-cdn.com'], // Allow scripts from self and trusted CDN
-  imgSrc: "'self' data:", // Allow images from self and base64-encoded images
-};
+```js
+security: {
+  contentSecurityPolicy: {
+    defaultSrc: "'self'",
+    scriptSrc: ["'self'", 'https://trusted-cdn.com'],
+    imgSrc: "'self' data:",
+  }
+}
 ```
 
 To disable CSP:
 
-```ts
-security.contentSecurityPolicy = false; // (not recommended)
+```js
+security: {
+  contentSecurityPolicy: false, // (not recommended)
+}
 ```
 
-### 2. Strict Transport Security (HSTS)
+### Strict Transport Security (HSTS)
 
 Enforces HTTPS connections to the server, preventing man-in-the-middle attacks.
 
@@ -379,35 +407,41 @@ Enforces HTTPS connections to the server, preventing man-in-the-middle attacks.
 | `includeSubDomains`   | Applies HSTS to all subdomains             | Protects subdomains after first visit |
 | `preload`             | Requests inclusion in browser preload list | Enforces HTTPS before first visit     |
 
-📌 **Note:** Without `preload`, HSTS only works **after a user’s first secure visit**. Preloading eliminates this delay but requires submitting your domain to [hstspreload.org](https://hstspreload.org). 🚀
+📌 **Note:** Without `preload`, HSTS only works **after a user’s first secure visit**. Preloading eliminates this delay but requires submitting your domain to [hstspreload.org](https://hstspreload.org).
 
 **Default:**
 
-```json
-{
-  "maxAge": 15552000,
-  "includeSubDomains": true,
-  "preload": false
+```js
+security: {
+  strictTransportSecurity: {
+    maxAge: 15552000,
+    includeSubDomains: true,
+    preload: false,
+  }
 }
 ```
 
 **Examples:**
 
-```ts
-security.strictTransportSecurity = {
-  maxAge: 31536000, // Enforce HTTPS for 1 year
-  includeSubDomains: true,
-  preload: true, // Allow inclusion in Chrome's preload list
-};
+```js
+security: {
+  strictTransportSecurity: {
+    maxAge: 31536000, // Enforce HTTPS for 1 year
+    includeSubDomains: true,
+    preload: true, // Allow inclusion in Chrome's preload list
+  }
+}
 ```
 
 To disable HSTS:
 
-```ts
-security.strictTransportSecurity = false;
+```js
+security: {
+  strictTransportSecurity: false,
+}
 ```
 
-### 3. Referrer Policy
+### Referrer Policy
 
 Controls how much **referrer** information is included in requests when navigating between pages. The referrer is the URL of the page that made the request.
 
@@ -432,37 +466,47 @@ Controls how much **referrer** information is included in requests when navigati
 
 **Examples:**
 
-_(Use no referrer at all (maximum privacy))_
+Use no referrer at all (maximum privacy)
 
-```ts
-security.referrerPolicy = 'no-referrer';
+```js
+security: {
+  referrerPolicy: 'no-referrer',
+}
 ```
 
-_(Allow referrer only when navigating within the same site)_
+Allow referrer only when navigating within the same site
 
-```ts
-security.referrerPolicy = 'same-origin';
+```js
+security: {
+  referrerPolicy: 'same-origin',
+}
 ```
 
-_(Send full referrer within the same site, but only the origin for cross-origin requests)_
+Send full referrer within the same site, but only the origin for cross-origin requests
 
-```ts
-security.referrerPolicy = 'origin-when-cross-origin';
+```js
+security: {
+  referrerPolicy: 'origin-when-cross-origin',
+}
 ```
 
-_(Strict security: prevent referrer leaks on HTTP downgrades)_
+Strict security: prevent referrer leaks on HTTP downgrades
 
-```ts
-security.referrerPolicy = 'strict-origin-when-cross-origin';
+```js
+security: {
+  referrerPolicy: 'strict-origin-when-cross-origin',
+}
 ```
 
-_(Disable Referrer Policy (not recommended))_
+Disable Referrer Policy (not recommended)
 
-```ts
-security.referrerPolicy = false;
+```js
+security: {
+  referrerPolicy: false,
+}
 ```
 
-### 4. Cross-Origin Resource Policy (CORP)
+### Cross-Origin Resource Policy (CORP)
 
 Restricts which origins can access your server's resources.
 
@@ -483,18 +527,27 @@ Restricts which origins can access your server's resources.
 
 **Examples:**
 
-```ts
-security.crossOriginResourcePolicy = 'same-site'; // Allow subdomains
-security.crossOriginResourcePolicy = 'cross-origin'; // Allow all origins
+```js
+security: {
+  crossOriginResourcePolicy: 'same-site', // Allow subdomains
+}
+```
+
+```js
+security: {
+  crossOriginResourcePolicy: 'cross-origin', // Allow all origins
+}
 ```
 
 To disable:
 
-```ts
-security.crossOriginResourcePolicy = false;
+```js
+security: {
+  crossOriginResourcePolicy: false,
+}
 ```
 
-### 5. Cross-Origin Opener Policy (COOP)
+### Cross-Origin Opener Policy (COOP)
 
 Prevents cross-origin interactions to enhance security.
 
@@ -515,18 +568,27 @@ Prevents cross-origin interactions to enhance security.
 
 **Examples:**
 
-```ts
-security.crossOriginOpenerPolicy = 'same-origin-allow-popups'; // Allow popups without full isolation
-security.crossOriginOpenerPolicy = 'unsafe-none'; // Disable COOP (not recommended)
+```js
+security: {
+  crossOriginOpenerPolicy: 'same-origin-allow-popups', // Allow popups without full isolation
+}
+```
+
+```js
+security: {
+  crossOriginOpenerPolicy:'unsafe-none', // Disable COOP (not recommended)
+}
 ```
 
 To disable:
 
-```ts
-security.crossOriginOpenerPolicy = false;
+```js
+security: {
+  crossOriginOpenerPolicy: false,
+}
 ```
 
-### 6. Cross-Origin Embedder Policy (COEP)
+### Cross-Origin Embedder Policy (COEP)
 
 Specifies how cross-origin resources can be embedded in your page.
 
@@ -547,18 +609,27 @@ false
 
 **Examples:**
 
-```ts
-security.crossOriginEmbedderPolicy = 'require-corp'; // Require CORP headers for embeds
-security.crossOriginEmbedderPolicy = 'credentialless'; // Allow embeds without credentials
+```js
+security: {
+  crossOriginEmbedderPolicy: 'require-corp', // Require CORP headers for embeds
+}
+```
+
+```js
+security: {
+  crossOriginEmbedderPolicy: 'credentialless', // Allow embeds without credentials
+}
 ```
 
 To disable:
 
-```ts
-security.crossOriginEmbedderPolicy = false;
+```js
+security: {
+  crossOriginEmbedderPolicy: false,
+}
 ```
 
-### 7. Origin-Agent Cluster
+### Origin-Agent Cluster
 
 Makes sure your website runs in its own isolated space in the browser, preventing certain cross-origin data leaks and side-channel attacks like `Spectre`
 
@@ -570,11 +641,13 @@ true
 
 **Example:**
 
-```ts
-security.originAgentCluster = false; // Disable memory protection (not recommended)
+```js
+security: {
+  originAgentCluster: false, // Disable memory protection (not recommended)
+}
 ```
 
-### 8. X-Content-Type-Options
+### X-Content-Type-Options
 
 Stops the browser from guessing file types, forcing it to use the correct one. This helps prevent sneaky attacks where a file pretends to be something it's not.
 
@@ -586,27 +659,31 @@ true
 
 **Example:**
 
-```ts
-security.xContentTypeOptions = false; // Allow MIME-type sniffing (not recommended)
+```js
+security: {
+  xContentTypeOptions: false, // Allow MIME-type sniffing (not recommended)
+}
 ```
 
-### 9. X-DNS-Prefetch-Control
+### X-DNS-Prefetch-Control
 
 Controls DNS prefetching, which resolves domain names in the background to speed up browsing.
 
 **Default:**
 
-```json
-true // Disables DNS prefetching to reduce privacy risks
+```js
+true; // Disables DNS prefetching to reduce privacy risks
 ```
 
 **Example:**
 
-```ts
-security.xDnsPrefetchControl = false; // Enable DNS prefetching (not recommended)
+```js
+security: {
+  xDnsPrefetchControl: false, // Enable DNS prefetching (not recommended)
+}
 ```
 
-### 10. X-Download-Options
+### X-Download-Options
 
 Prevents automatic execution of downloaded files.
 
@@ -618,11 +695,13 @@ true
 
 **Example:**
 
-```ts
-security.xDownloadOptions = false; // Allow automatic execution (not recommended)
+```js
+security: {
+  xDownloadOptions: false,  // Allow automatic execution (not recommended)
+}
 ```
 
-### 11. XSS Protection
+### XSS Protection
 
 Prevents some types of cross-site scripting attacks.
 
@@ -634,11 +713,13 @@ true
 
 **Example:**
 
-```ts
-security.xssProtection = false; // Disable XSS protection (not recommended)
+```js
+security: {
+  xssProtection: false,  // Disable XSS protection (not recommended)
+}
 ```
 
-### 12. X-Frame-Options
+### X-Frame-Options
 
 Prevents your site from being embedded in `<iframe>` elements to protect against **clickjacking attacks**.
 
@@ -658,12 +739,13 @@ Prevents your site from being embedded in `<iframe>` elements to protect against
 
 **Examples:**
 
-```ts
-security.xFrameOptions = 'DENY'; // Block all iframes
-security.xFrameOptions = false; // Allow all iframes (not recommended)
+```js
+security: {
+  xFrameOptions: false,  // Allow all iframes (not recommended)
+}
 ```
 
-### 13. X-Permitted-Cross-Domain-Policies
+### X-Permitted-Cross-Domain-Policies
 
 Controls whether `Flash` and `Acrobat` can make cross-domain requests.
 
@@ -685,13 +767,16 @@ Controls whether `Flash` and `Acrobat` can make cross-domain requests.
 
 **Examples:**
 
-```ts
-security.xPermittedCrossDomainPolicies = 'master-only';
-security.xPermittedCrossDomainPolicies = 'all';
+```js
+security: {
+  xPermittedCrossDomainPolicies: 'master-only',
+}
 ```
 
 To disable:
 
-```ts
-security.xPermittedCrossDomainPolicies = false;
+```js
+security: {
+  xPermittedCrossDomainPolicies: false,
+}
 ```
