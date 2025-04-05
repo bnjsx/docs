@@ -97,8 +97,6 @@ This tells Flex where to look for your components when rendering them. Now, when
 
 To render a component from the `views` folder, you simply provide the component name without including the `views` folder in the path.
 
-**Example: Render a Component**
-
 ```js
 const { render } = require('bnjsx');
 
@@ -181,7 +179,7 @@ router.get('/', async (req, res) => {
 
 While this approach works, **using `Response.proyotype.render`** is cleaner and more concise, reducing the potential for messy, spaghetti code.
 
-Now that you know how to render components in Flex, you can start building dynamic, reusable components that can be easily nested and composed. In the next section, we’ll dive into the basics of the **Flex Engine** and learn how to render components from within other components.
+Now that you know how to render components in Flex, you can start building dynamic, reusable components that can be easily nested and composed. In the next section, we’ll dive into the basics of **Flex Engine** and learn how to render components from within other components.
 
 ## Flex Statements
 
@@ -258,8 +256,6 @@ $print(#app_name)
 
 Flex also provides a **short print statement**: `$(value)`, which is a more concise way to print values.
 
-Here are the examples split individually:
-
 ```
 $(@year())
 ```
@@ -323,11 +319,11 @@ Need to show something only if a condition is met? Use `$if`.
 
 ```
 $if(user)
-  Welcome back $(user.name)!
+  Welcome back!
 $endif
 ```
 
-> If `user` exists, the template will show "Welcome back [user's name]!" Otherwise, nothing will appear.
+> If `user` exists, the template will show "Welcome back!" Otherwise, nothing will appear.
 
 #### If-Else Statement
 
@@ -341,7 +337,7 @@ $else
 $endif
 ```
 
-> If `user.active` is `true`, it displays "[user's name] is active!" Otherwise, it says "not active".
+> If `user.active` is `true`, it displays "active!" Otherwise, it says "not active".
 
 #### If-ElseIf-Else Statement
 
