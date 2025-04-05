@@ -1,6 +1,6 @@
 # Bnjsx Flex Template Engine
 
-**Flex** is a dynamic, **component-based template engine** that lets you create reusable UI components with ease. It adapts to different data inputs, so each component renders uniquely based on the context, making your interface more txtible and responsive.
+**Flex** is a dynamic, **component-based template engine** that lets you create reusable UI components with ease. It adapts to different data inputs, so each component renders uniquely based on the context, making your interface more flexible and responsive.
 
 **Why Use It?**
 Use Flex to streamline your development with clean, modular, and reusable components that scale with your project. It simplifies dynamic content rendering and reduces the complexity of building responsive, data-driven UIs.
@@ -17,31 +17,32 @@ Use Flex to streamline your development with clean, modular, and reusable compon
    - [Foreach Statement](#foreach-statement)
    - [Render Statement](#render-statement)
    - [Replacements](#replacements)
+   - [Include Statement](#include-statement)
 4. [Tools And Globals](#tools-and-globals)
    - [Global Variables](#global-variables)
-   - [Tools (aka template superpowers)](#tools-aka-template-superpowers)
+   - [Template Tools](#template-tools)
 
 ## Official VS Code Extension
 
 To make working with Flex templates even easier, we’ve created **Flexer**, the official VS Code extension for **Flex**. It provides syntax highlighting, auto-completion, and formatting for `.fx` files, making your development experience smoother and more efficient.
 
-You can install **Flexer** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=BnjsxTeam.txter), and start using its features right away:
+You can install **Flexer** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=BnjsxTeam.flexer), and start using its features right away:
 
 - **Syntax Highlighting** for Flex statements, HTML, and JavaScript.
 - **Auto-Completion** for Flex statements, HTML elements, and Tailwind CSS classes.
 - **Code Formatting** to keep your `.fx` files clean and properly indented.
 
-We encourage you to contribute to **Flexer** if you can. Whether it’s fixing bugs, adding new features, or improving the code, your help will make it even better. You can find the extension's repository on [GitHub](https://github.com/bnjsx/txter) and submit your pull requests.
+We encourage you to contribute to **Flexer** if you can. Whether it’s fixing bugs, adding new features, or improving the code, your help will make it even better. You can find the extension's repository on [GitHub](https://github.com/bnjsx/flexer) and submit your pull requests.
 
 Your contributions are highly appreciated!
 
 ## What is Rendering in Flex?
 
-In Flex, rendering is the process of displaying a component with specific values provided at runtime. A component is essentially a template that can display dynamic content based on the values you pass to it. Each time you render a component with different data, the output will be unique, making your UI txtible and adaptive.
+In Flex, rendering is the process of displaying a component with specific values provided at runtime. A component is essentially a template that can display dynamic content based on the values you pass to it. Each time you render a component with different data, the output will be unique, making your UI flexible and adaptive.
 
 For example, consider a simple component for a button:
 
-```txt
+```
 <button>$(title)</button>
 ```
 
@@ -53,7 +54,7 @@ render('button', { title: 'Hello World' }).then(console.log).catch(console.log);
 
 The output would be:
 
-```txt
+```
 <button>Hello World</button>
 ```
 
@@ -65,7 +66,7 @@ render('button', { title: 'Nice' }).then(console.log).catch(console.log);
 
 The output would change accordingly:
 
-```txt
+```
 <button>Nice</button>
 ```
 
@@ -201,29 +202,29 @@ You can use `$print()` to print the following types of values:
 
 #### Printing Scalar Values
 
-```txt
+```
 $print('Hello, World!')
 ```
 
-```txt
+```
 $print(123)
 ```
 
-```txt
+```
 $print(true)
 ```
 
-```txt
+```
 $print(undefined)
 ```
 
-```txt
+```
 $print(null)
 ```
 
 #### Printing a Tool Return Value
 
-```txt
+```
 $print(@year())
 ```
 
@@ -231,15 +232,15 @@ $print(@year())
 
 #### Printing a Local Reference
 
-```txt
+```
 $print(user.name)
 ```
 
-```txt
+```
 $print(friends.length)
 ```
 
-```txt
+```
 $print(friends[0].name)
 ```
 
@@ -247,7 +248,7 @@ $print(friends[0].name)
 
 #### Printing a Global Reference
 
-```txt
+```
 $print(#app_name)
 ```
 
@@ -259,23 +260,23 @@ Flex also provides a **short print statement**: `$(value)`, which is a more conc
 
 Here are the examples split individually:
 
-```txt
+```
 $(@year())
 ```
 
-```txt
+```
 $(@month())
 ```
 
-```txt
+```
 $(#app_name)
 ```
 
-```txt
+```
 $(name)
 ```
 
-```txt
+```
 $(age)
 ```
 
@@ -290,25 +291,25 @@ The **log statement** is useful for debugging. It allows you to log various valu
 
 #### Logging a Tool Return Value
 
-```txt
+```
 $log(@year())
 ```
 
 #### Logging a Global Value
 
-```txt
+```
 $log(#app_name)
 ```
 
 #### Logging a Local Value
 
-```txt
+```
 $log(age)
 ```
 
 #### Logging a Scalar Value
 
-```txt
+```
 $log('Hello, World!')
 ```
 
@@ -320,7 +321,7 @@ Conditions are essential in any template engine, in `Flex` template engine, you 
 
 Need to show something only if a condition is met? Use `$if`.
 
-```txt
+```
 $if(user)
   Welcome back $(user.name)!
 $endif
@@ -332,7 +333,7 @@ $endif
 
 What if you want to show different content when the condition is false? Use `$else`!
 
-```txt
+```
 $if(user.active)
   $(user.name) is active!
 $else
@@ -346,7 +347,7 @@ $endif
 
 Sometimes, you need more than just two options. That’s where `$elseif` comes in!
 
-```txt
+```
 $if(user.country === 'japan')
   $(user.name) is living in Japan!
 $elseif(user.country === 'france')
@@ -364,7 +365,7 @@ $endif
 
 Yes, you can go as deep as you want! Here’s an example:
 
-```txt
+```
 $if(user)
   $if(user.name)
    User name is: $(user.name)
@@ -389,13 +390,13 @@ $endif
 
 Flex supports JavaScript-like conditions, so you can combine logic as needed.
 
-```txt
+```
 $if(user && user.name)
   User name is: $(user.name)
 $endif
 ```
 
-```txt
+```
 $if(!user.country)
   User country is unknown
 $endif
@@ -414,37 +415,37 @@ $endif
 
 #### More Condition Examples
 
-```txt
+```
 $if('hello' === 'hello') Content shown $endif
 ```
 
-```txt
+```
 $if(true) Content shown $endif
 ```
 
-```txt
+```
 $if(false) No content $endif
 ```
 
-```txt
+```
 $if(123) Content shown $endif
 ```
 
-```txt
+```
 $if(123 < 0) No content $endif
 ```
 
-```txt
+```
 $if(true && (false || true) && 'hello') Content shown $endif
 ```
 
 > You can use `numbers`, `strings`, `booleans`, `null` and `undefined` directly inside conditions.
 
-```txt
+```
 $if(@year() === 2025) Happy New Year 2025! $endif
 ```
 
-```txt
+```
 $if(@fetchUserById(2000).name === 'james')
   If user 2000 is James, show this.
 $endif
@@ -454,7 +455,7 @@ $endif
 
 > The example above fetches a user from the database and checks if the name is "James." While this shows what `Flex` is capable of, I recommend keeping complex logic, like database queries, in your controllers for better structure and maintainability.
 
-```txt
+```
 $if(#app_name === 'bnjsx') Welcome to Bnjsx! $endif
 ```
 
@@ -468,7 +469,7 @@ Use `$if`, `$elseif`, and `$else` to make your templates dynamic and responsive.
 
 `Flex` supports looping, which is useful when you need to iterate over a list of items _(like posts)_ and display them dynamically on your page. To achieve this, you can use the `$foreach` statement.
 
-```txt
+```
 $foreach(post, posts)
   Post Title: $(post.title)
 $endforeach
@@ -480,7 +481,7 @@ $endforeach
 
 You can also use nested `$foreach` statements to iterate over sub-collections within the main collection:
 
-```txt
+```
 $foreach(post, posts)
   Post Title: $(post.title)
   $foreach(category, post.categories)
@@ -495,7 +496,7 @@ $endforeach
 
 You can combine various statements to control the flow of the loop. For example, you can check if a collection exists before iterating over it:
 
-```txt
+```
 $if(posts)
   $foreach(post, posts)
     Post Title: $(post.title)
@@ -518,7 +519,7 @@ The first argument of `$foreach` represents the current item in the iteration. I
 
 Here’s an example demonstrating how scope works in `Flex`:
 
-```txt
+```
 $foreach(post, posts)
   $log(post)
   $foreach(category, post.categories)
@@ -534,7 +535,7 @@ $endforeach
 
 If you use the same variable name inside a nested loop, it will **overwrite** the outer variable. Here's an example:
 
-```txt
+```
 $foreach(post, posts)
   $log(post)
   $foreach(post, post.categories)
@@ -549,7 +550,7 @@ $endforeach
 
 You can also access the index of each item in the loop. The second argument in `$foreach` represents the index of the current item in the collection.
 
-```txt
+```
 $foreach(post, index, posts)
   $log(post)
   $log(index)
@@ -560,25 +561,25 @@ $endforeach
 
 ### Render Statement
 
-While you can render a Flex component using the `render` method, you can also use the `$render` statement to achieve the same result with more txtibility.
+While you can render a Flex component using the `render` method, you can also use the `$render` statement to achieve the same result with more flexibility.
 
 Imagine we have two pages, `register.fx` and `login.fx`, both requiring input fields and buttons with different titles. Instead of copying and pasting the same HTML and customizing it, you can create dynamic components and render them wherever needed.
 
 Let’s start by creating a dynamic `button.fx` component:
 
-```txt
+```
 <button> $(title) </button>
 ```
 
 This component expects a `title` to be provided during rendering. If you don’t pass a title, the button will show `undefined`:
 
-```txt
+```
 <button> undefined </button>
 ```
 
 To handle this, you can check if the title is provided and use a default value:
 
-```txt
+```
 <button> $if(title) $(title) $else Submit $endif </button>
 ```
 
@@ -590,8 +591,8 @@ render('components.button').then(console.log).catch(console.log);
 
 This outputs:
 
-```txt
-<button> Submit </button>
+```
+<button>Submit</button>
 ```
 
 If you provide a title:
@@ -604,23 +605,23 @@ render('components.button', { title: 'Login' })
 
 The result will be:
 
-```txt
-<button> Login </button>
+```
+<button>Login</button>
 ```
 
 Now, in your `login.fx` page, you can simply use this component:
 
-```txt
+```
 <form>
-  <input name='email' type='text'/>
-  <input name='password' type='password'/>
+  <input name="email" type="text" />
+  <input name="password" type="password" />
   $render('components.button', title='Login')$endrender
 </form>
 ```
 
 The output will be:
 
-```txt
+```
 <form>
   <input name='email' type='text'/>
   <input name='password' type='password'/>
@@ -632,7 +633,7 @@ As you can see, the component is rendered exactly where you placed the `$render`
 
 Let’s update the `button.fx` component to accept the `type` attribute:
 
-```txt
+```
 <button $if(type) type='$(type)' $endif>
   $if(title) $(title) $else Submit $endif
 </button>
@@ -640,7 +641,7 @@ Let’s update the `button.fx` component to accept the `type` attribute:
 
 Now, in the `login.fx` page, we can pass the `type` as `submit`:
 
-```txt
+```
 <form action='/login' method='POST'>
   <input name='email' type='text'/>
   <input name='password' type='password'/>
@@ -650,7 +651,7 @@ Now, in the `login.fx` page, we can pass the `type` as `submit`:
 
 The result will now be:
 
-```txt
+```
 <form action='/login' method='POST'>
   <input name='email' type='text'/>
   <input name='password' type='password'/>
@@ -660,17 +661,17 @@ The result will now be:
 
 And there you go! You've just created a reusable, dynamic `button` component that you can use across your project without duplicating code. The real power comes when you need to make updates or style changes—you only need to modify the component in one place!
 
-The beauty of this approach is that you can create as many dynamic components as you need. Just make sure they’re useful and txtible.
+The beauty of this approach is that you can create as many dynamic components as you need. Just make sure they’re useful and flexible.
 
 One more thing to note: the `$render` statement has an `$endrender` tag. This is because you can pass additional values into the render statement, which we’ll cover next with **replacements**!
 
 ### Replacements
 
-Replacements let you take placeholders in your templates and replace them with dynamic values. It’s like giving your template a bit of txtibility and creativity.
+Replacements let you take placeholders in your templates and replace them with dynamic values. It’s like giving your template a bit of flexibility and creativity.
 
 Let’s look at a simple example with a `button` component:
 
-```txt
+```
 <button> $place('title') </button>
 ```
 
@@ -678,7 +679,7 @@ In this case, we’ve set up a `title` placeholder inside the button. When we re
 
 Now, in the `login.fx` page, we render the button and pass a value
 
-```txt
+```
 <form>
   $render('components.button')
     $replace('title') Login $endreplace
@@ -688,7 +689,7 @@ Now, in the `login.fx` page, we render the button and pass a value
 
 The result?
 
-```txt
+```
 <form>
   <button> Login </button>
 </form>
@@ -696,13 +697,13 @@ The result?
 
 Just like that, we’ve replaced `title` with `Login`. But what if you want to replace more than one value?
 
-```txt
+```
 <button type="$place('type')"> $place('title') </button>
 ```
 
 Here, we can replace both the `title` and `type` placeholders
 
-```txt
+```
 <form>
   $render('components.button')
     $replace('title') Login $endreplace
@@ -713,7 +714,7 @@ Here, we can replace both the `title` and `type` placeholders
 
 The result now looks like this:
 
-```txt
+```
 <form>
   <button type="submit"> Login </button>
 </form>
@@ -723,13 +724,13 @@ The result now looks like this:
 
 You might be thinking, “Can’t I just use variables and pass them when rendering the component?” Sure, but **replacements** are much more powerful.
 
-You’re not just replacing static values; you can use **templates** inside replacements. This opens up a whole new level of txtibility.
+You’re not just replacing static values; you can use **templates** inside replacements. This opens up a whole new level of flexibility.
 
 Imagine you’re building a `login.fx` and a `register.fx` page. Both pages use the same layout _(header, footer, etc.)_ Instead of copy-pasting the same layout into each page, you can use replacements to dynamically inject the content.
 
 Let’s create a `layout.fx` template:
 
-```txt
+```
 <!DOCTYPE html>
 <html>
   <head></head>
@@ -743,7 +744,7 @@ Let’s create a `layout.fx` template:
 
 Now, in `login.fx`, you can render the layout and provide your content to replace the `main` placeholder:
 
-```txt
+```
 $render('layout')
   $replace('main')
     <main>
@@ -766,7 +767,7 @@ Yes! First, we resolve the replacement templates. These templates have access to
 
 The final result?
 
-```txt
+```
 <!DOCTYPE html>
 <html>
   <head></head>
@@ -795,10 +796,6 @@ The final result?
 
 - You **can’t use `$place` inside a `$replace`**. Think of them as separate steps—one defines the place, the other fills it.
 
-Absolutely—let’s make it clear, friendly, and human!
-
----
-
 ### Include Statement
 
 The `$include` statement lets you **drop in static components** wherever you need them. It's perfect for content that never changes but appears in multiple places—like logos, dividers, or visual elements.
@@ -821,13 +818,13 @@ If your component has logic or needs data, use `$render` instead.
 
 Let’s say you’ve got this in `components/divider.fx`:
 
-```txt
+```
 <hr class="my-6 border-gray-200" />
 ```
 
 You can now include it in any template like this:
 
-```txt
+```
 <h2>Blog Posts</h2>
 $include('components.divider')
 <ul>
@@ -838,7 +835,7 @@ $include('components.divider')
 
 This will be rendered as:
 
-```html
+```
 <h2>Blog Posts</h2>
 <hr class="my-6 border-gray-200" />
 <ul>
@@ -892,17 +889,17 @@ globals: {
 
 Now that the global variables are defined, you can access and use them anywhere in your templates. For instance, let’s log the app name and domain:
 
-```txt
+```
 $log(#app.name)
 ```
 
-```txt
+```
 $log(#app.entry)
 ```
 
 Or you can even use them directly in HTML:
 
-```html
+```
 <a href="$(#app.entry)/docs/v1">Docs</a>
 ```
 
@@ -910,7 +907,7 @@ Or you can even use them directly in HTML:
 
 Although it’s not really necessary to pass a global variable when rendering a component (since it’s globally available), Flex does support it anyway. Here’s an example of passing the global `entry` variable to a component:
 
-```txt
+```
 $render('components.button', entry=#app.entry) $endrender
 ```
 
@@ -918,7 +915,7 @@ $render('components.button', entry=#app.entry) $endrender
 
 Global variables are also perfect for conditions. You can use them to control what’s displayed based on their values. For example, let’s check if the app name is `bnjsx` and display a message accordingly:
 
-```txt
+```
 $if(#app.name === 'bnjsx')
   <p>Welcome to Bnjsx!</p>
 $else
@@ -930,7 +927,7 @@ $endif
 
 The power of global variables is that they centralize your values, making updates across your whole project easier. If your client wants to change the app name or domain, you can do it in **one place** _(your `bnjsx.config.js` file)_. This means no more hunting down values across multiple pages or components.
 
-### Tools (aka template superpowers)
+### Template Tools
 
 So, what are **tools**?
 
@@ -965,7 +962,7 @@ Say you’re rendering a login page and you want to show error messages. But som
 - an object,
 - or just a plain string.
 
-```txt
+```
 $if(@isArr(error))
   <ul>
     $foreach(message, error)
@@ -1007,7 +1004,7 @@ module.exports = {
 
 Then in your template:
 
-```txt
+```
 $foreach(post, @fetchPosts())
   <p>$(post.title)</p>
 $endforeach
@@ -1056,7 +1053,7 @@ tools: {
 },
 ```
 
-```txt
+```
 Welcome, $(@titleCase(user.name))!
 ```
 
